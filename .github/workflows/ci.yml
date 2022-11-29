@@ -3,10 +3,10 @@
 # or something?
 name: CI pipeline
 on:
-  pull-request:
+  push:
     branches:
       - main
-  push:
+  pull-request:
     branches:
       - main
 
