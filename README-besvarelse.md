@@ -8,4 +8,7 @@ Her kan du skrive inn main og checke "Require a pull request before merging".
 
 ## Del 4 - Docker
 #### Oppgave 1:
-For å få workflowen til å fungere med min DockerHub konto må jeg legge inn mitt brukernavn og en access token som secrets i GitHub. I utganspunktet feiler workflowen fordi den ikke klarer å autentisere mot DockerHub. 
+For å få workflowen til å fungere med min DockerHub konto må jeg legge inn mitt brukernavn og en access token som secrets i GitHub. I utganspunktet feiler workflowen fordi den ikke klarer å autentisere mot DockerHub.
+
+#### Oppgave 3:
+For å kunne laste opp container image til eget ECR repo må sensor legge inn noen secrets i GitHub. Legg inn AWS_ACCESS_KEY_ID og AWS_SECRET_ACCESS_KEY. I tillegg endre env variablene `ECR_REGISTRY`, `ECR_REPOSITORY` og `AWS_REGION` under `Build, tag, and push image to Amazon ECR` jobben i `docker.yml`.
