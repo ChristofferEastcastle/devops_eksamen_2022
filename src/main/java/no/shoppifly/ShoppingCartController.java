@@ -1,16 +1,18 @@
 package no.shoppifly;
 
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.function.ToDoubleFunction;
 
 @RestController()
 public class ShoppingCartController {
 
     private Counter cartCounter;
+    private Counter checkouts;
+    private Meter cartsValue;
 
     @Autowired
     private final CartService cartService;
@@ -18,8 +20,12 @@ public class ShoppingCartController {
     @Autowired
     ShoppingCartController(MeterRegistry meterRegistry, CartService cartService) {
         this.cartService = cartService;
-        this.cartCounter = meterRegistry.counter("SHOPPING_CART_CONTROLLER.CartCounter");
+        String prefix = "SHOPPING_CART_CONTROLLER";
+        this.cartCounter = meterRegistry.counter(prefix + ".carts");
+        this.checkouts = meterRegistry.counter(prefix + ".checkouts");
+        this.cartsValue = Gauge.builder(prefix + ".cartsvalue", cartService, CartService::total).register(meterRegistry);
     }
+
     public ShoppingCartController(CartService cartService) {
         this.cartService = cartService;
     }
@@ -37,6 +43,7 @@ public class ShoppingCartController {
     @PostMapping(path = "/cart/checkout")
     public String checkout(@RequestBody Cart cart) {
         cartCounter.increment(-1);
+        checkouts.increment();
         return cartService.checkout(cart);
     }
 
